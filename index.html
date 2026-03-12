@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>RailGuard Radar Visualizer</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<h1>RailGuard Monitoring Dashboard</h1>
+
+<div class="tabs">
+<button onclick="showTab('baseline')">Baseline OOB Detection</button>
+<button onclick="showTab('phase')">Phase-Based Detection</button>
+</div>
+
+<div id="baseline" class="tab">
+
+<h2>Baseline Radar Readings</h2>
+
+<canvas id="baselineChart"></canvas>
+
+</div>
+
+<div id="phase" class="tab">
+
+<h2>Theoretical Phase Displacement</h2>
+
+<canvas id="phaseChart"></canvas>
+
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
