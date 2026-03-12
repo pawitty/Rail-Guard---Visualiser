@@ -8,7 +8,23 @@
 
 <body>
 
-<h1>RailGuard Monitoring Dashboard</h1>
+<header class="header">
+<h1>RailGuard Radar Monitoring Dashboard</h1>
+
+<p>
+RailGuard explores the use of millimeter-wave radar to detect structural
+movement in railway tracks. The system uses the TI IWR6843 radar sensor
+to measure displacement between two reflective targets.
+
+The dashboard compares two approaches:
+
+• Baseline FFT magnitude detection (OOB firmware results)  
+• Proposed phase-based displacement estimation
+
+The goal is to demonstrate how phase tracking enables detection of
+sub-millimeter structural displacement.
+</p>
+</header>
 
 <div class="tabs">
 <button onclick="showTab('baseline')">Baseline OOB Detection</button>
