@@ -1,0 +1,15 @@
+body{
+ font-family: Arial;
+ margin:40px;
+}
+
+.tabs button{
+ margin:10px;
+ padding:10px 20px;
+}
+
+.tab{
+ display:none;
+ width:70%;
+ margin:auto;
+}
