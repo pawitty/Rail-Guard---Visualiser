@@ -1,54 +1,87 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>RailGuard Radar Visualizer</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>RailGuard Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-<header class="header">
-<h1>RailGuard Radar Monitoring Dashboard</h1>
-
-<p>
-RailGuard explores the use of millimeter-wave radar to detect structural
-movement in railway tracks. The system uses the TI IWR6843 radar sensor
-to measure displacement between two reflective targets.
-
-The dashboard compares two approaches:
-
-• Baseline FFT magnitude detection (OOB firmware results)  
-• Proposed phase-based displacement estimation
-
-The goal is to demonstrate how phase tracking enables detection of
-sub-millimeter structural displacement.
-</p>
-</header>
-
-<div class="tabs">
-<button onclick="showTab('baseline')">Baseline OOB Detection</button>
-<button onclick="showTab('phase')">Phase-Based Detection</button>
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2>RAILGUARD</h2>
+  <div class="nav-links">
+    <span>Dashboard</span>
+    <span>Live</span>
+    <span>Config</span>
+    <span>Logs</span>
+  </div>
+  <div class="status">● SYSTEM ONLINE</div>
 </div>
 
-<div id="baseline" class="tab">
+<!-- HERO -->
+<section class="hero">
+  <h1>Intelligent Track Misalignment Detection</h1>
+  <p>Real-time monitoring using mmWave radar (IWR6843)</p>
+</section>
 
-<h2>Baseline Radar Readings</h2>
+<!-- KPI CARDS -->
+<section class="cards">
+  <div class="card">
+    <h3>Temperature</h3>
+    <p id="temp">32.5°C</p>
+  </div>
 
-<canvas id="baselineChart"></canvas>
+  <div class="card">
+    <h3>Rod 1</h3>
+    <p id="rod1">0.18 m</p>
+  </div>
 
-</div>
+  <div class="card">
+    <h3>Rod 2</h3>
+    <p id="rod2">0.23 m</p>
+  </div>
 
-<div id="phase" class="tab">
+  <div class="card">
+    <h3>Rate</h3>
+    <p>60 Hz</p>
+  </div>
+</section>
 
-<h2>Theoretical Phase Displacement</h2>
+<!-- MAIN -->
+<section class="main">
 
-<canvas id="phaseChart"></canvas>
+  <!-- RADAR -->
+  <div class="panel">
+    <h3>Radar View</h3>
+    <canvas id="radarCanvas"></canvas>
+  </div>
 
-</div>
+  <!-- CHART -->
+  <div class="panel">
+    <h3>Displacement</h3>
+    <canvas id="chart"></canvas>
+  </div>
 
-<script src="data.js"></script>
+</section>
+
+<!-- LOGS -->
+<section class="logs">
+  <h3>Event Logs</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Event</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody id="logTable"></tbody>
+  </table>
+</section>
+
 <script src="script.js"></script>
-
 </body>
 </html>
