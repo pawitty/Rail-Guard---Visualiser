@@ -1,84 +1,102 @@
-@@ -1,15 +1,73 @@
-body{
- font-family: Arial;
- margin:40px;
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0b132b;
-  color: white;
+@@ -1,38 +1,65 @@
+function showTab(id){
+ document.querySelectorAll(".tab").forEach(t=>t.style.display="none")
+ document.getElementById(id).style.display="block"
+const ctx = document.getElementById('chart').getContext('2d');
+
+let data = [0.1, 0.12, 0.15, 0.18, 0.23];
+
+const chart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['1','2','3','4','5'],
+    datasets: [{
+      label: 'Displacement',
+      data: data
+    }]
+  }
+});
+
+// RADAR CANVAS
+const canvas = document.getElementById("radarCanvas");
+const ctx2 = canvas.getContext("2d");
+
+canvas.width = 300;
+canvas.height = 300;
+
+function drawRadar() {
+  ctx2.clearRect(0,0,300,300);
+
+  ctx2.beginPath();
+  ctx2.arc(150,150,100,0,Math.PI);
+  ctx2.strokeStyle = "green";
+  ctx2.stroke();
+
+  // points
+  ctx2.fillStyle = "lime";
+  ctx2.beginPath();
+  ctx2.arc(120,120,5,0,2*Math.PI);
+  ctx2.fill();
+
+  ctx2.beginPath();
+  ctx2.arc(170,100,5,0,2*Math.PI);
+  ctx2.fill();
 }
 
-.tabs button{
- margin:10px;
- padding:10px 20px;
-/* NAVBAR */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px;
-  background: #1c2541;
+showTab("baseline")
+
+// Baseline chart
+new Chart(document.getElementById("baselineChart"),{
+
+ type:"line",
+
+ data:{
+  labels:tests,
+  datasets:[{
+   label:"Rod Separation (m)",
+   data:rodSeparation,
+   borderColor:"blue",
+   fill:false
+  }]
+ }
+})
+
+// Phase chart
+new Chart(document.getElementById("phaseChart"),{
+
+ type:"line",
+
+ data:{
+  labels:phaseShift,
+  datasets:[{
+   label:"Displacement (m)",
+   data:displacement,
+   borderColor:"red",
+   fill:false
+  }]
+ }
+})
+drawRadar();
+
+// LOGS
+const logTable = document.getElementById("logTable");
+
+function addLog(event, value) {
+  let row = `<tr>
+    <td>${new Date().toLocaleTimeString()}</td>
+    <td>${event}</td>
+    <td>${value}</td>
+  </tr>`;
+  logTable.innerHTML += row;
 }
 
-.tab{
- display:none;
- width:70%;
- margin:auto;
-.nav-links span {
-  margin: 0 10px;
-  cursor: pointer;
-}
+addLog("System Start", "OK");
 
-.status {
-  color: #00ff88;
-}
+// SIMULATION
+setInterval(() => {
+  let val = (Math.random()*0.3).toFixed(2);
+  document.getElementById("rod2").innerText = val + " m";
 
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 30px;
-}
+  addLog("Update", val);
 
-/* CARDS */
-.cards {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px;
-}
-
-.card {
-  background: #1c2541;
-  padding: 20px;
-  border-radius: 10px;
-  width: 150px;
-  text-align: center;
-}
-
-/* MAIN */
-.main {
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-}
-
-.panel {
-  flex: 1;
-  background: #1c2541;
-  padding: 20px;
-  border-radius: 10px;
-}
-
-/* LOGS */
-.logs {
-  padding: 20px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-td, th {
-  border: 1px solid #333;
-  padding: 10px;
-}
+}, 3000);
