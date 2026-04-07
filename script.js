@@ -1,102 +1,104 @@
-@@ -1,38 +1,65 @@
-function showTab(id){
- document.querySelectorAll(".tab").forEach(t=>t.style.display="none")
- document.getElementById(id).style.display="block"
-const ctx = document.getElementById('chart').getContext('2d');
+function showTab(tabId) {
+  const tabs = document.querySelectorAll(".tab-content");
+  const buttons = document.querySelectorAll(".tab-btn");
 
-let data = [0.1, 0.12, 0.15, 0.18, 0.23];
+  tabs.forEach(tab => tab.classList.remove("active"));
+  buttons.forEach(btn => btn.classList.remove("active"));
 
-const chart = new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['1','2','3','4','5'],
-    datasets: [{
-      label: 'Displacement',
-      data: data
-    }]
+  document.getElementById(tabId).classList.add("active");
+
+  const clickedButton = [...buttons].find(btn =>
+    btn.getAttribute("onclick").includes(tabId)
+  );
+  if (clickedButton) clickedButton.classList.add("active");
+}
+
+/* =========================
+   DEFAULT DATA FALLBACK
+   (used if data.js doesn't define them)
+========================= */
+const baselineX = typeof rangeBins !== "undefined" ? rangeBins : [1, 2, 3, 4, 5];
+const baselineY = typeof fftMagnitude !== "undefined" ? fftMagnitude : [10, 22, 18, 30, 25];
+
+const rodSeparationData = typeof rodSeparation !== "undefined" ? rodSeparation : [0.05, 0.05, 0.06, 0.08, 0.10];
+const phaseShiftData = typeof phaseShift !== "undefined" ? phaseShift : [0.05, 0.1, 0.2, 0.5, 1.0];
+const displacementData = typeof displacement !== "undefined" ? displacement : [0.00004, 0.00008, 0.00016, 0.00040, 0.00080];
+
+/* =========================
+   PLOTLY THEME
+========================= */
+const darkLayout = {
+  paper_bgcolor: "rgba(0,0,0,0)",
+  plot_bgcolor: "rgba(255,255,255,0.03)",
+  font: { color: "#ffffff", family: "Segoe UI, Arial, sans-serif" },
+  xaxis: {
+    gridcolor: "rgba(255,255,255,0.08)",
+    zerolinecolor: "rgba(255,255,255,0.12)"
+  },
+  yaxis: {
+    gridcolor: "rgba(255,255,255,0.08)",
+    zerolinecolor: "rgba(255,255,255,0.12)"
+  },
+  margin: { t: 30, r: 20, b: 60, l: 60 }
+};
+
+const config = {
+  responsive: true,
+  displayModeBar: false
+};
+
+/* =========================
+   BASELINE CHART
+========================= */
+Plotly.newPlot("baselineChart", [
+  {
+    x: baselineX,
+    y: baselineY,
+    type: "scatter",
+    mode: "lines+markers",
+    line: { width: 3, color: "#00b4d8" },
+    marker: { size: 8, color: "#90e0ef" },
+    name: "FFT Magnitude"
   }
-});
+], {
+  ...darkLayout,
+  title: "",
+  xaxis: { ...darkLayout.xaxis, title: "Range Bin / Sample Index" },
+  yaxis: { ...darkLayout.yaxis, title: "Magnitude" }
+}, config);
 
-// RADAR CANVAS
-const canvas = document.getElementById("radarCanvas");
-const ctx2 = canvas.getContext("2d");
+/* =========================
+   PHASE CHART
+========================= */
+Plotly.newPlot("phaseChart", [
+  {
+    x: phaseShiftData,
+    y: displacementData,
+    type: "scatter",
+    mode: "lines+markers",
+    line: { width: 3, color: "#ffb703" },
+    marker: { size: 8, color: "#ffd166" },
+    name: "Displacement"
+  }
+], {
+  ...darkLayout,
+  xaxis: { ...darkLayout.xaxis, title: "Phase Shift (rad)" },
+  yaxis: { ...darkLayout.yaxis, title: "Estimated Displacement (m)" }
+}, config);
 
-canvas.width = 300;
-canvas.height = 300;
-
-function drawRadar() {
-  ctx2.clearRect(0,0,300,300);
-
-  ctx2.beginPath();
-  ctx2.arc(150,150,100,0,Math.PI);
-  ctx2.strokeStyle = "green";
-  ctx2.stroke();
-
-  // points
-  ctx2.fillStyle = "lime";
-  ctx2.beginPath();
-  ctx2.arc(120,120,5,0,2*Math.PI);
-  ctx2.fill();
-
-  ctx2.beginPath();
-  ctx2.arc(170,100,5,0,2*Math.PI);
-  ctx2.fill();
-}
-
-showTab("baseline")
-
-// Baseline chart
-new Chart(document.getElementById("baselineChart"),{
-
- type:"line",
-
- data:{
-  labels:tests,
-  datasets:[{
-   label:"Rod Separation (m)",
-   data:rodSeparation,
-   borderColor:"blue",
-   fill:false
-  }]
- }
-})
-
-// Phase chart
-new Chart(document.getElementById("phaseChart"),{
-
- type:"line",
-
- data:{
-  labels:phaseShift,
-  datasets:[{
-   label:"Displacement (m)",
-   data:displacement,
-   borderColor:"red",
-   fill:false
-  }]
- }
-})
-drawRadar();
-
-// LOGS
-const logTable = document.getElementById("logTable");
-
-function addLog(event, value) {
-  let row = `<tr>
-    <td>${new Date().toLocaleTimeString()}</td>
-    <td>${event}</td>
-    <td>${value}</td>
-  </tr>`;
-  logTable.innerHTML += row;
-}
-
-addLog("System Start", "OK");
-
-// SIMULATION
-setInterval(() => {
-  let val = (Math.random()*0.3).toFixed(2);
-  document.getElementById("rod2").innerText = val + " m";
-
-  addLog("Update", val);
-
-}, 3000);
+/* =========================
+   ROD SEPARATION CHART
+========================= */
+Plotly.newPlot("rodChart", [
+  {
+    x: rodSeparationData,
+    y: displacementData,
+    type: "bar",
+    marker: { color: "#8ecae6" },
+    name: "Shift"
+  }
+], {
+  ...darkLayout,
+  xaxis: { ...darkLayout.xaxis, title: "Rod Separation (m)" },
+  yaxis: { ...darkLayout.yaxis, title: "Estimated Displacement (m)" }
+}, config);
