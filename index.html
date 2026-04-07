@@ -1,55 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>RailGuard Radar Visualizer</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RailGuard Radar Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
 </head>
-
 <body>
 
-<h1>RailGuard Monitoring Dashboard</h1>
-<header class="header">
-<h1>RailGuard Radar Monitoring Dashboard</h1>
+  <div class="container">
 
-<p>
-RailGuard explores the use of millimeter-wave radar to detect structural
-movement in railway tracks. The system uses the TI IWR6843 radar sensor
-to measure displacement between two reflective targets.
+    <!-- HERO -->
+    <section class="hero">
+      <h1>RailGuard Radar Monitoring Dashboard</h1>
+      <p>
+        RailGuard uses millimeter-wave radar to detect structural movement in railway tracks.
+        This dashboard compares two approaches:
+        <strong>Baseline FFT magnitude detection</strong> and
+        <strong>Phase-based displacement estimation</strong>.
+        The aim is to demonstrate how phase tracking can enable sub-millimeter movement detection.
+      </p>
+    </section>
 
-The dashboard compares two approaches:
+    <!-- SUMMARY CARDS -->
+    <section class="info-grid">
+      <div class="info-card">
+        <h3>Radar Sensor</h3>
+        <p>TI IWR6843</p>
+      </div>
+      <div class="info-card">
+        <h3>Detection Modes</h3>
+        <p>2</p>
+      </div>
+      <div class="info-card">
+        <h3>Target Application</h3>
+        <p>Track Shift Monitoring</p>
+      </div>
+      <div class="info-card">
+        <h3>Resolution Goal</h3>
+        <p>Sub-mm</p>
+      </div>
+    </section>
 
-* Baseline FFT magnitude detection (OOB firmware results)  
-* Proposed phase-based displacement estimation
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('baseline')">Baseline OOB Detection</button>
+      <button class="tab-btn" onclick="showTab('phase')">Phase-Based Detection</button>
+    </div>
 
-The goal is to demonstrate how phase tracking enables detection of
-sub-millimeter structural displacement.
-</p>
-</header>
+    <!-- BASELINE TAB -->
+    <section id="baseline" class="tab-content active">
+      <h2 class="section-title">Baseline Radar Readings</h2>
 
-<div class="tabs">
-<button onclick="showTab('baseline')">Baseline OOB Detection</button>
-<button onclick="showTab('phase')">Phase-Based Detection</button>
-</div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h3>Baseline FFT / Range Magnitude</h3>
+          <div id="baselineChart" class="chart-box"></div>
+        </div>
+      </div>
 
-<div id="baseline" class="tab">
+      <div class="note-box">
+        <strong>Interpretation:</strong>
+        Baseline detection mainly observes target presence and magnitude variation.
+        It is useful for identifying reflective objects, but it is less sensitive to very small displacement changes.
+      </div>
+    </section>
 
-<h2>Baseline Radar Readings</h2>
+    <!-- PHASE TAB -->
+    <section id="phase" class="tab-content">
+      <h2 class="section-title">Theoretical Phase Displacement</h2>
 
-<canvas id="baselineChart"></canvas>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h3>Phase Shift vs Displacement</h3>
+          <div id="phaseChart" class="chart-box"></div>
+        </div>
 
-</div>
+        <div class="chart-card">
+          <h3>Rod Separation vs Estimated Shift</h3>
+          <div id="rodChart" class="chart-box"></div>
+        </div>
+      </div>
 
-<div id="phase" class="tab">
+      <div class="note-box">
+        <strong>Interpretation:</strong>
+        Phase-based estimation is more suitable for micro-displacement tracking because
+        even small motion causes measurable phase variation in the reflected radar signal.
+      </div>
+    </section>
 
-<h2>Theoretical Phase Displacement</h2>
+    <div class="footer">
+      RailGuard Final Year Project • mmWave Radar Structural Monitoring
+    </div>
 
-<canvas id="phaseChart"></canvas>
+  </div>
 
-</div>
-
-<script src="data.js"></script>
-<script src="script.js"></script>
-
+  <script src="data.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
